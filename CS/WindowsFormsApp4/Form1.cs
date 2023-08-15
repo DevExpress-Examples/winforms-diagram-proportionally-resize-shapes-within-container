@@ -45,31 +45,36 @@ namespace WindowsFormsApp4
         private void DiagramControl1_ItemsResizing(object sender, DiagramItemsResizingEventArgs e) {
             var groups = e.Items.GroupBy(x => x.Item.ParentItem);
             foreach (var group in groups) {
-                var container = (DiagramContainer)group.Key;
-                var containingRect = container.Items.Select(x => x.RotatedDiagramBounds().BoundedRect()).Aggregate(Rect.Empty, Rect.Union);
-                container.Position = new PointFloat((float)containingRect.X, (float)containingRect.Y);
-                container.Width = (float)containingRect.Width;
-                container.Height = (float)containingRect.Height;
+                if (group.Key is DiagramContainer container) {
+                    var containingRect = container.Items.Select(x => x.RotatedDiagramBounds().BoundedRect()).Aggregate(Rect.Empty, Rect.Union);
+                    container.Position = new PointFloat((float)containingRect.X, (float)containingRect.Y);
+                    container.Width = (float)containingRect.Width;
+                    container.Height = (float)containingRect.Height;
+                }
             }
         }
 
-        public DiagramContainer CreateContainerShape1()
-        {
-            var container = new DiagramContainer()
-            {
+        public DiagramContainer CreateContainerShape1() {
+            var container = new DiagramContainer() {
                 Width = 200,
                 Height = 200,
-                Position = new PointFloat(100f, 100f)
+                Position = new PointFloat(100f, 100f),
+                CanAddItems = false,
+                ItemsCanChangeParent = false,
+                ItemsCanCopyWithoutParent = false,
+                ItemsCanDeleteWithoutParent = false,
+                ItemsCanAttachConnectorBeginPoint = false,
+                ItemsCanAttachConnectorEndPoint = false
             };
 
             container.Appearance.BorderSize = 0;
             container.Appearance.BackColor = Color.Transparent;
 
-            var innerShape1 = new DiagramShape()
-            {
-                CanSelect = false,
+            var innerShape1 = new DiagramShape() {
+                CanSelect = true,
                 CanChangeParent = false,
-                CanEdit = false,
+                CanEdit = true,
+                CanResize = false,
                 CanCopyWithoutParent = false,
                 CanDeleteWithoutParent = false,
                 CanMove = false,
@@ -79,7 +84,6 @@ namespace WindowsFormsApp4
 
                 Content = "Custom text"
             };
-
 
             var innerShape2 = new DiagramShape()
             {
@@ -94,7 +98,6 @@ namespace WindowsFormsApp4
                 Width = 200,
                 Position = new PointFloat(0, 50),
             };
-
 
             container.Items.Add(innerShape1);
             container.Items.Add(innerShape2);
