@@ -11,14 +11,13 @@ To support this feature, handle `DiagramControl`'s [BeforeItemsResizing](https:/
 
 ```cs
 private void DiagramControl1_BeforeItemsResizing(object sender, DiagramBeforeItemsResizingEventArgs e) {
-	var containers = e.Items.OfType<DiagramContainer>();
-	foreach (var container in containers) {
-		e.Items.Remove(container);
-		foreach (var item in container.Items)
-			e.Items.Add(item);
-	}
+    var containers = e.Items.OfType<DiagramContainer>();
+    foreach (var container in containers) {
+        e.Items.Remove(container);
+        foreach (var item in container.Items)
+            e.Items.Add(item);
+    }
 }
-
 ```
 
 In this case, `DiagramControl` will resize the inner items instead of the parent container.
@@ -26,16 +25,16 @@ After that, handle `DiagramControl`'s [ItemsResizing](https://docs.devexpress.co
 
 ```cs
 private void DiagramControl1_ItemsResizing(object sender, DiagramItemsResizingEventArgs e) {
-	var groups = e.Items.GroupBy(x => x.Item.ParentItem);
-	foreach (var group in groups) {
-		var container = (DiagramContainer)group.Key;
-		var containingRect = container.Items.Select(x => x.RotatedDiagramBounds().BoundedRect()).Aggregate(Rect.Empty, Rect.Union);
-		container.Position = new PointFloat((float)containingRect.X, (float)containingRect.Y);
-		container.Width = (float)containingRect.Width;
-		container.Height = (float)containingRect.Height;
-	}
+    var groups = e.Items.GroupBy(x => x.Item.ParentItem);
+    foreach (var group in groups) {
+        if (group.Key is DiagramContainer container) {
+            var containingRect = container.Items.Select(x => x.RotatedDiagramBounds().BoundedRect()).Aggregate(Rect.Empty, Rect.Union);
+            container.Position = new PointFloat((float)containingRect.X, (float)containingRect.Y);
+            container.Width = (float)containingRect.Width;
+            container.Height = (float)containingRect.Height;
+        }
+    }
 }
-
 ```
 
 ## Files to Review
