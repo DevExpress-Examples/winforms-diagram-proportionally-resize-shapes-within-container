@@ -24,6 +24,7 @@ namespace WindowsFormsApp4
             diagramControl1.BeforeItemsResizing += DiagramControl1_BeforeItemsResizing;
             diagramControl1.ItemsResizing += DiagramControl1_ItemsResizing;
 
+            DiagramControl.ItemTypeRegistrator.Register(typeof(CustomDiagramContainer));
             diagramControl1.Items.Add(CreateContainerShape1());
         }
 
@@ -35,7 +36,7 @@ namespace WindowsFormsApp4
         }
 
         private void DiagramControl1_BeforeItemsResizing(object sender, DiagramBeforeItemsResizingEventArgs e) {
-            var containers = e.Items.OfType<DiagramContainer>();
+            var containers = e.Items.OfType<CustomDiagramContainer>();
             foreach (var container in containers) {
                 e.Items.Remove(container);
                 foreach (var item in container.Items)
@@ -45,7 +46,7 @@ namespace WindowsFormsApp4
         private void DiagramControl1_ItemsResizing(object sender, DiagramItemsResizingEventArgs e) {
             var groups = e.Items.GroupBy(x => x.Item.ParentItem);
             foreach (var group in groups) {
-                if (group.Key is DiagramContainer container) {
+                if (group.Key is CustomDiagramContainer container) {
                     var containingRect = container.Items.Select(x => x.RotatedDiagramBounds().BoundedRect()).Aggregate(Rect.Empty, Rect.Union);
                     container.Position = new PointFloat((float)containingRect.X, (float)containingRect.Y);
                     container.Width = (float)containingRect.Width;
@@ -54,8 +55,8 @@ namespace WindowsFormsApp4
             }
         }
 
-        public DiagramContainer CreateContainerShape1() {
-            var container = new DiagramContainer() {
+        public CustomDiagramContainer CreateContainerShape1() {
+            var container = new CustomDiagramContainer() {
                 Width = 200,
                 Height = 200,
                 Position = new PointFloat(100f, 100f),
@@ -105,4 +106,6 @@ namespace WindowsFormsApp4
             return container;
         }
     }
+
+    public class CustomDiagramContainer : DiagramContainer { }
 }
