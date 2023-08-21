@@ -1,22 +1,15 @@
 ﻿using DevExpress.Diagram.Core;
 using DevExpress.Diagram.Core.Native;
 using DevExpress.Utils;
-using DevExpress.Utils.Serializing;
 using DevExpress.XtraDiagram;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 
-namespace WindowsFormsApp4
-{
+namespace WindowsFormsApp4 {
     public partial class Form1 : Form {
         public Form1() {
             InitializeComponent();
@@ -29,28 +22,28 @@ namespace WindowsFormsApp4
         }
 
 
-        protected override void OnLoad(EventArgs e)
-        {
+        protected override void OnLoad(EventArgs e) {
             base.OnLoad(e);
             diagramControl1.FitToItems(diagramControl1.Items);
         }
 
         private void DiagramControl1_BeforeItemsResizing(object sender, DiagramBeforeItemsResizingEventArgs e) {
             var containers = e.Items.OfType<CustomDiagramContainer>();
-            foreach (var container in containers) {
-                e.Items.Remove(container);
-                foreach (var item in container.Items)
+            foreach (var customContainer in containers) {
+                e.Items.Remove(customContainer);
+                foreach (var item in customContainer.Items)
                     e.Items.Add(item);
             }
         }
         private void DiagramControl1_ItemsResizing(object sender, DiagramItemsResizingEventArgs e) {
             var groups = e.Items.GroupBy(x => x.Item.ParentItem);
             foreach (var group in groups) {
-                if (group.Key is CustomDiagramContainer container) {
-                    var containingRect = container.Items.Select(x => x.RotatedDiagramBounds().BoundedRect()).Aggregate(Rect.Empty, Rect.Union);
-                    container.Position = new PointFloat((float)containingRect.X, (float)containingRect.Y);
-                    container.Width = (float)containingRect.Width;
-                    container.Height = (float)containingRect.Height;
+                if (group.Key is CustomDiagramContainer) {
+                    var customContainer = (CustomDiagramContainer)group.Key;
+                    var containingRect = customContainer.Items.Select(x => x.RotatedDiagramBounds().BoundedRect()).Aggregate(Rect.Empty, Rect.Union);
+                    customContainer.Position = new PointFloat((float)containingRect.X, (float)containingRect.Y);
+                    customContainer.Width = (float)containingRect.Width;
+                    customContainer.Height = (float)containingRect.Height;
                 }
             }
         }
@@ -86,8 +79,7 @@ namespace WindowsFormsApp4
                 Content = "Custom text"
             };
 
-            var innerShape2 = new DiagramShape()
-            {
+            var innerShape2 = new DiagramShape() {
                 CanSelect = false,
                 CanChangeParent = false,
                 CanEdit = false,
