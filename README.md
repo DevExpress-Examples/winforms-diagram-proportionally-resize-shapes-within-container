@@ -6,7 +6,7 @@
 
 # WinForms DiagramControl - Proportionally Resize Shapes Within the Parent Container
 
-This example demonstrates how to resize inner shapes when their parent container is resized. You can implement this additional logic if you [create custom shapes based on containers](https://github.com/DevExpress-Examples/winforms-diagram-create-custom-shapes-based-on-diagram-containers) or use containers to group shapes.
+This example resizes inner shapes when the associated parent container is resized. You can introduce the logic herein if you [create custom shapes based on containers](https://github.com/DevExpress-Examples/winforms-diagram-create-custom-shapes-based-on-diagram-containers) or use containers to group shapes.
 
 ![](./img/Proportionally_Resize_Shape_Containers.gif)
 
@@ -31,9 +31,9 @@ This example demonstrates how to resize inner shapes when their parent container
    }
    ```
 
-   In this case, the `DiagramControl` resizes these inner items instead of the parent container.
+   In this instance, the `DiagramControl` resizes these inner items instead of the parent container.
 
-3. Handle the [DiagramControl.ItemsResizing](https://docs.devexpress.com/WindowsForms/DevExpress.XtraDiagram.DiagramControl.ItemsResizing) event and correct the container position and size:
+3. Handle the [DiagramControl.ItemsResizing](https://docs.devexpress.com/WindowsForms/DevExpress.XtraDiagram.DiagramControl.ItemsResizing) event and correct container position and size:
 
    ```cs
    private void DiagramControl1_ItemsResizing(object sender, DiagramItemsResizingEventArgs e) {
@@ -57,6 +57,7 @@ This example demonstrates how to resize inner shapes when their parent container
 ## Documentation
 
 - [Containers and Lists](https://docs.devexpress.com/WindowsForms/117672/controls-and-libraries/diagrams/diagram-items/containers)
+- [Create Custom Diagram Items](https://docs.devexpress.com/WindowsForms/404797/controls-and-libraries/diagrams/diagram-items/create-custom-diagram-items)
 - [DiagramControl.BeforeItemsResizing](https://docs.devexpress.com/WindowsForms/DevExpress.XtraDiagram.DiagramControl.BeforeItemsResizing)
 - [DiagramControl.ItemsResizing](https://docs.devexpress.com/WindowsForms/DevExpress.XtraDiagram.DiagramControl.ItemsResizing)
 
